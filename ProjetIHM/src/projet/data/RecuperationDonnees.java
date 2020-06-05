@@ -16,9 +16,7 @@ public class RecuperationDonnees {
 			while ( line != null) {
 			   	String[] array = line.split(",");
 			   
-			    int id = Integer.parseInt(array[0]);
-			    float val = Float.parseFloat(array[6]);
-			        		
+			  //TO DO 		
 			    line = bufRead.readLine();
 			}
 	
