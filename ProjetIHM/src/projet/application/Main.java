@@ -2,44 +2,43 @@ package projet.application;
 
 import java.io.File;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import projet.data.DonneesPlanete;
 import projet.data.RecuperationDonnees;
 
-public class Main {
 
-	public static void main(String[] args) {
-	
-	DonneesPlanete terre = new DonneesPlanete("Terre"); 
-	
-	if(args.length > 0)
-	{
-		File tempFile = new File(args[0]);
+public class Main extends Application{
+
+
+	@Override
+	public void start(Stage stage) throws Exception {
+		try 
+		{
+			Parent root = FXMLLoader.load(getClass().getResource("/projet/controller/Vues.fxml"));
+			//Scene scene = new Scene(root); 
+			stage.setScene(new Scene(root));
+			stage.setTitle("Global Warming 3D"); 
+			stage.show();
+		} 
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+		}
 		
-		if(tempFile.exists())
-		{
-			System.out.println("[Main] Reading the file " + args[0] + " ...");
-					
-			//We start by reading the CSV file
-			RecuperationDonnees.getDataFromCSVFile(args[0], terre);
-			
-			System.out.println("[Main] End of the fi le " + args[0] + ".");
-		}
-		else
-		{
-			System.out.println("[Main] No file " + args[0]);
-		}
-	}
-	else
-	{
-		System.out.println("[Main] You should enter the CSV file path as a parameter.");
 	}
 	
-
+	public static void main(String[] args) {
+		launch(args);
+	/*
 	terre.getAnomalieZoneAnnee(12, 154, 1881); 
 	System.out.println(terre.getAnomalieMax());
 	System.out.println(terre.getAnomalieMin()); 
 	terre.getAnomaliesZone(12, 154);
-	terre.getAnomaliesAnnee(1952); 
+	terre.getAnomaliesAnnee(1952); */
 	
 	}
 }
