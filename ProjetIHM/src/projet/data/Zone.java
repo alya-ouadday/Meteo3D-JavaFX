@@ -26,7 +26,13 @@ public class Zone {
 	public float getAnomalieAnnee(int annee) {
 		return anomalies.get(annee); 
 	}
-
+	public int getLat() {
+		return lat;
+	}
+	
+	public int getLon() {
+		return lon; 
+	}
 	@Override
 	public String toString() {
 		return  "(" + lat + ", "+ lon + ")";

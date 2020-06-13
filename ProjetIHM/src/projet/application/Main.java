@@ -18,7 +18,7 @@ public class Main extends Application{
 	public void start(Stage stage) throws Exception {
 		try 
 		{
-			Parent root = FXMLLoader.load(getClass().getResource("/projet/controller/Vues.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/projet/vues/Vues.fxml"));
 			//Scene scene = new Scene(root); 
 			stage.setScene(new Scene(root));
 			stage.setTitle("Global Warming 3D"); 

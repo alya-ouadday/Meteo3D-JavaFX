@@ -1,4 +1,4 @@
-package projet.controller;
+package projet.vues;
 
 import javafx.event.EventHandler;
 import javafx.scene.*;
