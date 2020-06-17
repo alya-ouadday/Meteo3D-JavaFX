@@ -1,23 +1,35 @@
 package projet.vues;
 
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Animation  {
 
+	private Image imagePause = new Image(getClass().getResourceAsStream("/projet/vues/vuesBoutons/pauseBtn.PNG"), 30, 30, false, false);
+	private Image imagePlay = new Image(getClass().getResourceAsStream("/projet/vues/vuesBoutons/playBtn.PNG"), 30, 30, false, false);
 	private  int rotationSpeed ; 
 	private float multipleSpeed;
+	private FloatProperty speedForProp;
+	private FloatProperty speedBackProp;
 	private static final int SPEEDMAX = 500;
 	private static final int SPEEDMIN = 10; 
+	private static final int INITIAL_SPEED = 100; 
 	private int angle ; 
 	private AnimationTimer timer; 
 	private boolean play; 
 	
 	public Animation(Slider sliderAnnee, Group earth) {
-		  rotationSpeed = 50; 
+		  rotationSpeed = INITIAL_SPEED ; 
 	      multipleSpeed = 1; 
+	      speedForProp = new SimpleFloatProperty(multipleSpeed + 0.25f); 
+	      speedBackProp = new SimpleFloatProperty(multipleSpeed - 0.25f); 
 	      angle = 1; 
 	      play = false; 
 	      final long startNanoTime = System.nanoTime();; 
@@ -25,8 +37,7 @@ public class Animation  {
 	       timer = new AnimationTimer() {
 	    	   @Override
 		        public void handle(long currentNanoTime) {
-		        	double t = (currentNanoTime - startNanoTime)/ 1000000000.0;
-		        	double rotationSpeed = 100; 
+		        	double t = (currentNanoTime - startNanoTime)/ 1000000000.0; 
 		        	earth.setRotationAxis(new Point3D(0,1,0));
 		        	earth.setRotate(rotationSpeed*t); 
 		        	if(rotationSpeed*t / (360*angle) >= 1) {
@@ -51,15 +62,28 @@ public class Animation  {
 	public void plusVite() {
 		if(rotationSpeed < SPEEDMAX) {
 		rotationSpeed += 25; 
-		multipleSpeed += 0.5; 
+		multipleSpeed += 0.25; 
+		speedForProp.setValue(multipleSpeed + 0.25);
+		speedBackProp.setValue(multipleSpeed - 0.25);
+		System.out.println(multipleSpeed + " prop : " + speedForProp);
+		}
+
+	}
+	
+	public void moinsVite() {
+		if(rotationSpeed > SPEEDMIN) {
+		rotationSpeed -= 25; 
+		multipleSpeed -= 0.25; 
+		speedForProp.setValue(multipleSpeed + 0.25);
+		speedBackProp.setValue(multipleSpeed - 0.25);
 		}
 	}
 	
-	public void MoinsVite() {
-		if(rotationSpeed > SPEEDMIN) {
-		rotationSpeed -= 25; 
-		multipleSpeed -= 0.5; 
-		}
+	public void reset() {
+		multipleSpeed = 1;
+		rotationSpeed = INITIAL_SPEED; 
+		speedForProp.setValue(multipleSpeed + 0.25);
+		speedBackProp.setValue(multipleSpeed - 0.25);
 	}
 	
 	public int getRotationSpeed() {
@@ -69,6 +93,14 @@ public class Animation  {
 	public float getMultipleSpeed() {
 		return multipleSpeed; 
 	}
+	public FloatProperty getSpeedForProp() {
+		return speedForProp; 
+	}
+	
+	public FloatProperty getSpeedBackProp() {
+		return speedBackProp; 
+	}
+
 	
 	public AnimationTimer getTimer() {
 		return timer; 
@@ -77,11 +109,17 @@ public class Animation  {
 	public boolean getPlay() {
 		return play; 
 	}
-	public void setPlay() {
-		play = true;	
+	public void setPlay(Button button) {
+		timer.start();
+		play = true;
+		button.setGraphic(new ImageView(imagePause));
 	}
 	
-	public void setPause() {
+	public void setPause(Button button) {
+		timer.stop();
 		play = false; 
+		button.setGraphic(new ImageView(imagePlay));
 	}
+	
+
 }

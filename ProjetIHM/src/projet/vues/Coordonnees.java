@@ -1,6 +1,10 @@
 package projet.vues;
 
 import javafx.geometry.Point3D;
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Sphere;
 
 public class Coordonnees {
 	private static final float TEXTURE_LAT_OFFSET = -0.2f;
@@ -20,5 +24,24 @@ public class Coordonnees {
                 java.lang.Math.cos(java.lang.Math.toRadians(lon_cor))
                         * java.lang.Math.cos(java.lang.Math.toRadians(lat_cor))*radius);
     }
+    
+    public  static void afficheZone(Group ville, float x, float y , float z) {
+    	Sphere sphere = new Sphere(0.01); 
+    	final PhongMaterial redMaterial = new PhongMaterial();
+        redMaterial.setDiffuseColor(Color.RED);
+        redMaterial.setSpecularColor(Color.RED);
+        sphere.setMaterial(redMaterial);
+       
+        
+        sphere.setTranslateX(x);
+        sphere.setTranslateY(y);
+        sphere.setTranslateZ(z);
+        
+        ville.getChildren().add(sphere);
+        
+    }
+    
+    //from 3d to lat 
+    //from 3D to lon 
 
 }

@@ -7,68 +7,68 @@ import javafx.scene.paint.PhongMaterial;
 
 public class EchelleCouleur {
 	 
-	private static HashMap<String, PhongMaterial> echelle= new HashMap<String, PhongMaterial> ();
+	private HashMap<String, PhongMaterial> echelle= new HashMap<String, PhongMaterial> ();
 	
 	
 	public HashMap<String, PhongMaterial> getEchelle(){
 		return echelle; 
 	}
 
-	public  static void setEchelleQuadri() {
+	public  void setEchelleQuadri() {
 		
-		float alpha = 0.3f; 
+		//float alpha = 0; 
 		
 		final PhongMaterial rbMat = new PhongMaterial();
-        Color royalBlue = Color.rgb(65, 105, 225, alpha);
+        Color royalBlue = Color.rgb(65, 105, 225, 0);
         rbMat.setDiffuseColor(royalBlue);
         rbMat.setSpecularColor(royalBlue);
         echelle.put("royalBlue", rbMat);  
         
         final PhongMaterial skMat = new PhongMaterial();
-        Color skyBlue = Color.rgb(135, 206, 235, alpha);
+        Color skyBlue = Color.rgb(135, 206, 235, 0);
         skMat.setDiffuseColor(skyBlue);
         skMat.setSpecularColor(skyBlue);
         echelle.put("skyBlue", skMat); 
         
         final PhongMaterial lbMat = new PhongMaterial();
-        Color lightBlue = Color.rgb(173, 216, 230, alpha);  
+        Color lightBlue = Color.rgb(173, 216, 230, 0);  
         lbMat.setDiffuseColor(lightBlue);
         lbMat.setSpecularColor(lightBlue);
         echelle.put("lightBlue", lbMat); 
         
         final PhongMaterial yellowMat = new PhongMaterial();
-        Color yellow = Color.rgb(255, 255, 0, 0.00001);
+        Color yellow = new Color(1.0,1.0,0, 0); 
         yellowMat.setDiffuseColor(yellow);
         yellowMat.setSpecularColor(yellow);
         echelle.put("yellow", yellowMat);  
         
         
         final PhongMaterial goldMat = new PhongMaterial();
-        Color gold =Color.rgb(255, 215, 0, alpha);
+        Color gold =Color.rgb(255, 215, 0, 0);
         goldMat.setDiffuseColor(gold);
         goldMat.setSpecularColor(gold);
         echelle.put("gold", goldMat); 
         
         final PhongMaterial doMat = new PhongMaterial();
-        Color darkOrange = Color.rgb(255, 140, 0, alpha);
+        Color darkOrange = Color.rgb(255, 140, 0, 0);
         doMat.setDiffuseColor(darkOrange);
         doMat.setSpecularColor(darkOrange);
         echelle.put("darkOrange", doMat); 
         
         final PhongMaterial redMat = new PhongMaterial();
-        Color red = Color.rgb(255, 0, 0, alpha);
+        Color red = Color.rgb(255, 0, 0, 0);
         redMat.setDiffuseColor(red);
         redMat.setSpecularColor(red);
         echelle.put("red", redMat); 
         
         final PhongMaterial grayMat = new PhongMaterial();
-        Color gray =Color.rgb(0, 0, 0, alpha);
+        Color gray =Color.rgb(0, 0, 0, 0);
         grayMat.setDiffuseColor(gray);
         grayMat.setSpecularColor(gray);
         echelle.put("gray", grayMat); 
 	}
 	
-	public static PhongMaterial getMaterialQuadri(float anomalie) {
+	public PhongMaterial getMaterialQuadri(float anomalie) {
    		PhongMaterial material; 
 		if(anomalie <-2) {
 			material = echelle.get("royalBlue"); 
@@ -102,5 +102,29 @@ public class EchelleCouleur {
 		}
 		
 		return material; 
+	}
+	
+	
+	public void setEchelleHisto() {
+		final PhongMaterial redMat = new PhongMaterial();
+        Color red = Color.rgb(255, 0, 0);
+        redMat.setDiffuseColor(red);
+        redMat.setSpecularColor(red);
+        echelle.put("red", redMat); 
+        
+        final PhongMaterial rbMat = new PhongMaterial();
+        Color royalBlue = Color.rgb(65, 105, 225);
+        rbMat.setDiffuseColor(royalBlue);
+        rbMat.setSpecularColor(royalBlue);
+        echelle.put("royalBlue", rbMat);
+		
+	}
+	public PhongMaterial getMaterialHisto(float anomalie) {
+		if(anomalie > 0) {
+			return echelle.get("red"); 
+		}
+		else {
+			return echelle.get("royalBlue"); 
+		}
 	}
 }

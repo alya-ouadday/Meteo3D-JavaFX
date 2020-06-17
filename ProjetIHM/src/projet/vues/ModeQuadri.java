@@ -16,6 +16,7 @@ import projet.data.Zone;
 public class ModeQuadri {
 
 	private static LinkedHashMap<Zone, MeshView> listeQuadri = new LinkedHashMap<Zone, MeshView>() ;
+	private static EchelleCouleur echelle = new EchelleCouleur();
 	
     private static MeshView AddQuadrilateral(Group parent, Point3D topRight, Point3D bottomRight, Point3D bottomLeft, Point3D topLeft, PhongMaterial material)
     {
@@ -46,13 +47,15 @@ public class ModeQuadri {
         parent.getChildren().addAll(meshView);
         return meshView;
     }
-    
+    public static void setEchelleCouleur() {
+    	echelle.setEchelleQuadri();
+    }
     public static Group initQuadri(HashMap<String, Zone> zones, int annee) {
     	Group quadris = new Group(); 
     	for(Zone zone: zones.values()) {
     	int lat = zone.getLat(); 
     	int lon = zone.getLon(); 
-    	PhongMaterial material = EchelleCouleur.getMaterialQuadri(zone.getAnomalieAnnee(annee));
+    	PhongMaterial material = echelle.getMaterialQuadri(zone.getAnomalieAnnee(annee));
     	listeQuadri.put(zone, AddQuadrilateral(quadris, Coordonnees.geoCoordTo3dCoord(lat - 2, lon + 2, 1.05f), 
  	        		Coordonnees.geoCoordTo3dCoord(lat - 2, lon - 2, 1.05f),
  	        		Coordonnees.geoCoordTo3dCoord(lat + 2, lon - 2, 1.05f),
@@ -64,12 +67,12 @@ public class ModeQuadri {
     public static void updateQuadri(int annee) {
     	PhongMaterial material; 
     	for (Map.Entry<Zone, MeshView> entry : listeQuadri.entrySet()) {
-    	   material = EchelleCouleur.getMaterialQuadri(entry.getKey().getAnomalieAnnee(annee));
+    	   material = echelle.getMaterialQuadri(entry.getKey().getAnomalieAnnee(annee));
     		entry.getValue().setMaterial(material);
     	}
     }
     
-    
+    /*
     
     public static void setModeQuadri(DonneesPlanete terre, int annee, Group groupQuadri) {
     	long startTime = System.nanoTime(); 
@@ -89,7 +92,7 @@ public class ModeQuadri {
 		double totalTime = (endTime - startTime) / 1000000000.0;
 		System.out.println("temps d'execution setMode: " + totalTime);
     }
-    
+    */
     
     
 
