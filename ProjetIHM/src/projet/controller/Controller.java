@@ -19,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -39,6 +40,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -87,21 +89,24 @@ public class Controller {
 	@FXML
 	private  Button btnStop; 
 	@FXML
-	private ChoiceBox anneeDeb; 
-	@FXML
-	private ChoiceBox anneeFin; 
-	@FXML
-	private RadioButton visible; 
-	@FXML
-	private Label titreMode; 
+	private Button btnGraph; 
 	@FXML
 	private Label titreAnnee; 
 	@FXML
 	private Slider sliderAnnee; 
 	@FXML
-	private ChoiceBox uniteTemp;
-	@FXML
 	private Pane pane; 
+	@FXML
+	private AnchorPane echelleQuadri;
+	@FXML
+	private AnchorPane echelleHisto; 
+	@FXML
+	private AnchorPane menu; 
+	@FXML
+	private AnchorPane fenetre; 
+	@FXML 
+	private Button btnMenu; 
+	
 	
 	Image imagePause = new Image(getClass().getResourceAsStream("/projet/vues/vuesBoutons/pauseBtn.PNG"), 30, 30, false, false);
 	Image imagePlay = new Image(getClass().getResourceAsStream("/projet/vues/vuesBoutons/playBtn.PNG"),30, 30, false, false);
@@ -109,11 +114,12 @@ public class Controller {
 	private int annee;
 	private boolean selected = false; 
 	private DonneesPlanete terre;
-	
+	private boolean menuOpen = false; 
+	private SubScene window;
+
 
 	public Controller() {
-		terre = new DonneesPlanete("Terre");
-		
+		terre = new DonneesPlanete("Terre"); 
 		
 		File tempFile = new File("src/projet/data/DonneesTerre.csv");
 		if(tempFile.exists())
@@ -128,24 +134,28 @@ public class Controller {
 	@FXML
 	public void initialize()
     {	
-		
+
+		menu.setVisible(false); 
+		fenetre.setPrefWidth(558);
 		annee = 1880;
 		Group root3D = new Group();
-		Group earth = initializeEarth(363, 350, root3D);
+		Group earth = initializeEarth(420, 388, root3D);
 		Group modeVisualisation = new Group(); 
 		earth.getChildren().add(modeVisualisation);
 		Group ville = new Group(); 
 		earth.getChildren().add(ville); 
+		//mnemonicParsing="false" 
+		window= new SubScene(fenetre, fenetre.getPrefHeight(), fenetre.getPrefWidth(), true, SceneAntialiasing.BALANCED);
 			
 		Animation animation = new Animation(sliderAnnee, earth ); 
-		Graphique graph = new Graphique(); 
+		//Graphique graph = new Graphique(); 
 		
 		ModeQuadri.setEchelleCouleur();
 		ModeHisto.setEchelleCouleur();
 		HashMap<String, Zone> zones= terre.getListeZones();
 		
 		Group quadri = ModeQuadri.initQuadri(zones, annee); 
-		//Group histos = ModeHisto.initHistos(zones, annee);//
+		Group histos = ModeHisto.initHistos(zones, annee);//
 		
 		
 		
@@ -153,20 +163,30 @@ public class Controller {
 		labelBack.textProperty().bind(animation.getSpeedBackProp().asString());
 		
 		btnQuadri.setOnAction(event -> {
-			long startTime = System.nanoTime(); 
+			if(btnQuadri.isSelected()) {
+			btnHisto.setSelected(false);
 			modeVisualisation.getChildren().clear();
-			modeVisualisation.getChildren().add(quadri); 
-
-			long endTime   = System.nanoTime();
-			double totalTime = (endTime - startTime) / 1000000000.0;
-			System.out.println("temps d'execution : " + totalTime);
+			modeVisualisation.getChildren().add(quadri);
+			echelleQuadri.setVisible(true);
+			echelleHisto.setVisible(false);}
+			else {
+				modeVisualisation.getChildren().clear();
+				echelleQuadri.setVisible(false);
+			}
 		});
         
 		btnHisto.setOnAction(event -> {
+			if(btnHisto.isSelected()) {
+			btnQuadri.setSelected(false);
 			modeVisualisation.getChildren().clear();
-			//modeVisualisation.getChildren().add(histos);//
-			//ModeHisto.setModeHisto(terre, annee, modeVisualisation);
-			ModeHisto.initHist(zones, annee, modeVisualisation);
+			modeVisualisation.getChildren().add(histos);
+			echelleQuadri.setVisible(false);
+			echelleHisto.setVisible(true);}//
+			//ModeHisto.initHist(zones, annee, modeVisualisation);
+			else {
+				modeVisualisation.getChildren().clear();
+				echelleHisto.setVisible(false);
+			}
 		});
 		textAnnee.textProperty().bindBidirectional(sliderAnnee.valueProperty(),new NumberStringConverter());
 
@@ -177,7 +197,7 @@ public class Controller {
 			//animation.getTimer().start();
 			animation.setPlay(btnPlay); 
 			//btnPlay.setGraphic(new ImageView(imagePause));
-			
+			menu.setVisible(true);
 		}
         
 		else {
@@ -204,33 +224,8 @@ public class Controller {
 			
 			
 		});
-		/*
-		sliderAnnee.setOnMouseDragged(event -> {
-			modeVisualisation.getChildren().clear();
-        	Double anneeDouble = sliderAnnee.getValue();
-        	annee = anneeDouble.intValue();
-        	sliderAnnee.setValue(annee);
-			 
-			if(btnQuadri.isSelected()) {
-				ModeQuadri.updateQuadri(annee);
-				modeVisualisation.getChildren().add(quadri); 
-				//modeVisualisation.getChildren().clear();
-
-			}
-			
-			if(btnHisto.isSelected()) {
-				//ModeHisto.initHist(zones, annee, modeVisualisation);
-				//(terre, annee, modeVisualisation);
-				
-				ModeHisto.updateHistos(annee);//
-				System.out.println("je fais une update");
-				modeVisualisation.getChildren().add(histos);
-				System.out.println("je add mes histos au mode de visu");//
-				//modeVisualisation.getChildren().clear();
-				//System.out.println("je clear");
-			}
 		
-		});*/
+	
 		
 		sliderAnnee.valueProperty().addListener(new ChangeListener<Number>() 
 		{
@@ -239,27 +234,20 @@ public class Controller {
 	        {
 	        	modeVisualisation.getChildren().clear();
 	        	annee = newValue.intValue();
-	        	//sliderAnnee.setValue(annee);
 				 
 				if(btnQuadri.isSelected()) {
 					selected = false; 
 					ModeQuadri.updateQuadri(annee);
 					modeVisualisation.getChildren().add(quadri); 
-					//modeVisualisation.getChildren().clear();
 
 				}
 				
 				if(btnHisto.isSelected()) {
 					selected = false;
-					ModeHisto.initHist(zones, annee, modeVisualisation);
-
-					//(terre, annee, modeVisualisation);
-					
-					//ModeHisto.updateHistos(annee);//
-					System.out.println("je fais une update pour l'annne:" + annee);
-					//modeVisualisation.getChildren().add(histos);
+					//ModeHisto.initHist(zones, annee, modeVisualisation)
+					ModeHisto.updateHistos(annee);//
+					modeVisualisation.getChildren().add(histos);//
 	
-					//modeVisualisation.getChildren().clear();
 					
 				}
 			}
@@ -267,102 +255,104 @@ public class Controller {
 		
 		earth.setOnMouseMoved(event -> {
 			if(!selected) {
-			double lat  = (Math.toDegrees(Math.asin(-event.getY())) + 0.2); 
-			textLat.setText("" + Math.round(lat) );
-			double lon; 
-			double x = event.getX(); 
-			double y = event.getY(); 
-			System.out.println(x + " " + y);
-			System.out.println(event.getSceneX() + "," + event.getSceneY());
-			lon = Math.toDegrees((Math.asin(-x))/(Math.cos(Math.toRadians(lat - 0.2)))) - 2.8; 
-		
-			 if(x <= 0 )
-		        {
-		            lon = Math.toDegrees((Math.asin(-x))/(Math.cos(Math.toRadians(lat - 0.2)))) - 2.8; 
-		            		//(Math.atan(y/x) )* (180.0/Math.PI) ;
-		        }
-		        else if(x > 0 && y <= 0)
-		        {
-		            //lon = (Math.atan(y/x)  )* (180.0/Math.PI) ;
-		        	lon = Math.toDegrees((Math.asin(-x))/(Math.cos(Math.toRadians(lat - 0.2)))+ Math.PI) - 2.8;
-		        }
-		        else
-		        {
-		            //lon =( Math.atan(y/x) ) * (180.0/Math.PI) ;
-		        	lon = Math.toDegrees((Math.asin(-x))/(Math.cos(Math.toRadians(lat - 0.2)))) - 2.8;
-		        }
-			 textLong.setText("" + Math.round(lon));
+				
+				Point2D point = event.getPickResult().getIntersectedTexCoord();
+				int lat = Coordonnees.from3DtoLat(point);
+				int lon = Coordonnees.from3DtoLon(point);
+			 
+				textLat.setText("" + lat );
+				textLong.setText("" + lon);
+				
 			 
 			}
 		});
 		
 		earth.setOnMouseClicked(event -> {
-			if(!selected) {
+			System.out.println(event.getPickResult().getIntersectedNode());
+			
+			if((!selected)&& (event.getClickCount() == 2)) {
 			ville.getChildren().clear();
-			double x = event.getX(); 
-			double y = event.getY();
-			 Coordonnees.afficheZone(ville, (float)x, (float)y, (float)event.getZ());
-			 double lat  = (Math.toDegrees(Math.asin(-event.getY())) + 0.2); 
-				textLat.setText("" + Math.round(lat) );
+			 Point2D point = event.getPickResult().getIntersectedTexCoord();
+			 Point3D point3D = event.getPickResult().getIntersectedPoint();
+			 Coordonnees.afficheZone(ville, point3D); 
+				textLat.setText("" + Coordonnees.from3DtoLat(point) );
+				textLong.setText(""+ Coordonnees.from3DtoLon(point));
 				selected = true; }
-			else {
+			else if (selected && (event.getClickCount() == 2)) {
 				ville.getChildren().clear();
 				selected = false;
 			}
 		});
-		visible.setOnAction(new EventHandler<ActionEvent>() {
+	
+		btnGraph.setOnAction(new EventHandler<ActionEvent>() {
 		    public void handle(ActionEvent event) {
-		        Parent root;
-		        try {
-		        	//if(zones.containsKey(textLat+","+textLong)) {
-		            root = FXMLLoader.load(getClass().getResource("/projet/vues/Vues.fxml"));
-		           // LineChart linechart = graph.getLineChart();
-		       	 final NumberAxis xAxis = new NumberAxis(1880, 2020, 25);
-			     final NumberAxis yAxis = new NumberAxis();
-			     LineChart linechart = new LineChart(xAxis,yAxis);
-			     xAxis.setLabel("Année");
-			     yAxis.setLabel("Température");
-			     linechart.setTitle("Anomalies de température");
-		            linechart.getData().clear();
-					 //XYChart.Series series= new XYChart.Series();
-					 //series.setName("anomalies");
-		            XYChart.Series serie= new XYChart.Series();
-		            serie.setName("anomalie");
-					 HashMap<Integer, Float> anomalies = terre.getZone(Integer.parseInt(textLat.getText()), Integer.parseInt(textLong.getText())).getAnomalies();
-					 for (Map.Entry<Integer, Float> entry : anomalies.entrySet()) {
-						 if(entry.getValue() < Float.MAX_VALUE) {
-							 serie.getData().add(new XYChart.Data(entry.getKey(), entry.getValue()));
-						 System.out.println(entry.getKey()+ ",test" + entry.getValue());
-						 }
-						 
-						 else {
-							 serie.getData().add(new XYChart.Data(entry.getKey(), 0));
-						 }
-					 }
-					 System.out.println(serie.getData());
-					linechart.getData().add(serie);
+		    	try {
+		    	int lat = Integer.parseInt(textLat.getText());
+				int lon = Integer.parseInt(textLong.getText());
+		    	
+		    	Zone zone = terre.getZone(lat, lon);
+		        if(zone == null) {
+		        	zone = Coordonnees.zonePluroche(terre, lat, lon);
+		        }
+		        HashMap<Integer, Float> anomalies = zone.getAnomalies();
+				Graphique graph = new Graphique(anomalies); 
+				LineChart linechart = graph.getLineChart(); 
+				Stage stage = new Stage();
+				stage.setTitle("Evolution des anomalies pour la zone "+ zone.toString()+ " entre 1880 et 2020");
+
+				stage.setScene(new Scene(linechart,700,400));
+				stage.show();
+		    	}catch(NumberFormatException e) {
+		    		if(!textLong.getText().isEmpty()) {
+		    		textLat.clear();
+		    		textLong.clear(); }
+		    	}
+		    }
+
+		});
+		
+		textLat.setOnKeyReleased(event -> {
+			ville.getChildren().clear();
+			selected = true; 
+			if(!textLong.getText().isEmpty()) {
+				try {
+					int lat = Integer.parseInt(textLat.getText());
+					int lon = Integer.parseInt(textLong.getText());
+					Coordonnees.afficheZone(ville, lat, lon);
+				}catch(NumberFormatException e) {
+					textLat.clear();
+					
+				}
+			}
+		});
+		
+		textLong.setOnKeyReleased(event -> {
+			selected = true; 
+			ville.getChildren().clear();
+			if(!textLat.getText().isEmpty()) {
+				try {
+					int lat = Integer.parseInt(textLat.getText());
+					int lon = Integer.parseInt(textLong.getText());
+					Coordonnees.afficheZone(ville, lat, lon);
+				}catch(NumberFormatException e) {
+					textLong.clear();
+					
+				}
+			}
+		});
+		
+		btnMenu.setOnAction(event -> {
+			if(!menuOpen) {
+				menuOpen = true; 
+				menu.setVisible(true);
+				fenetre.setPrefWidth(830);
+				window.setWidth(830);
+				root3D.prefWidth(830);
 				
 			
-					 System.out.println(linechart.getData());
-			 
-		            Stage stage = new Stage();
-		            stage.setTitle("My New Stage Title");
-		            //stage.setScene(new Scene(root, 450, 450));
-		          
-		          //  graph.updateValues(terre.getZone(Integer.parseInt(textLat.getText()), Integer.parseInt(textLong.getText())).getAnomalies());
-		           //Scene scene =  new Scene(linechart,400,400);
-		            stage.setScene(new Scene(linechart,400,400));
-		            stage.show();
-		
-		            // Hide this current window (if this is what you want)
-		            //((Node)(event.getSource())).getScene().getWindow().hide();
-		        	//}
-		        }
-		        catch (IOException e) {
-		            e.printStackTrace();
-		        }
-		    }
+			}
 		});
+		
 
     }
 	
@@ -418,8 +408,11 @@ public class Controller {
 	    return earth; 
 	}
 	
-	public RadioButton visibleButton() {
-		return visible; 
+	public boolean getMenu() {
+		return menuOpen; 
+	}
+	public void setSize(Stage stage) {
+		stage.setWidth(830);
 	}
 	
 }

@@ -37,14 +37,16 @@ public class EchelleCouleur {
         echelle.put("lightBlue", lbMat); 
         
         final PhongMaterial yellowMat = new PhongMaterial();
-        Color yellow = new Color(1.0,1.0,0, 0); 
+        //Color yellow = new Color(0.5,0.5,0, 0.6); 
+        Color yellow = Color.rgb(230,230,0, 0); 
         yellowMat.setDiffuseColor(yellow);
         yellowMat.setSpecularColor(yellow);
         echelle.put("yellow", yellowMat);  
         
         
         final PhongMaterial goldMat = new PhongMaterial();
-        Color gold =Color.rgb(255, 215, 0, 0);
+        //Color gold =Color.rgb(255, 215, 0, 0);
+        Color gold =Color.rgb(240, 190, 0, 0);
         goldMat.setDiffuseColor(gold);
         goldMat.setSpecularColor(gold);
         echelle.put("gold", goldMat); 
@@ -117,14 +119,23 @@ public class EchelleCouleur {
         rbMat.setDiffuseColor(royalBlue);
         rbMat.setSpecularColor(royalBlue);
         echelle.put("royalBlue", rbMat);
+        
+        final PhongMaterial grayMat = new PhongMaterial();
+        Color gray =Color.rgb(80, 80, 80);
+        grayMat.setDiffuseColor(gray);
+        grayMat.setSpecularColor(gray);
+        echelle.put("gray", grayMat); 
 		
 	}
 	public PhongMaterial getMaterialHisto(float anomalie) {
-		if(anomalie > 0) {
+		if(anomalie >= 0) {
 			return echelle.get("red"); 
 		}
-		else {
+		else if (anomalie < 0 ) {
 			return echelle.get("royalBlue"); 
+		}
+		else {
+			return echelle.get("gray");
 		}
 	}
 }

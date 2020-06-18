@@ -94,6 +94,8 @@ public class ModeQuadri {
     }
     */
     
-    
+    public static LinkedHashMap<Zone, MeshView> getQuadris(){
+    	return listeQuadri; 
+    }
 
 }

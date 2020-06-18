@@ -60,7 +60,7 @@ public class Animation  {
 	}
 	
 	public void plusVite() {
-		if(rotationSpeed < SPEEDMAX) {
+		if(rotationSpeed < SPEEDMAX-25) {
 		rotationSpeed += 25; 
 		multipleSpeed += 0.25; 
 		speedForProp.setValue(multipleSpeed + 0.25);
@@ -71,7 +71,7 @@ public class Animation  {
 	}
 	
 	public void moinsVite() {
-		if(rotationSpeed > SPEEDMIN) {
+		if(rotationSpeed > SPEEDMIN+25) {
 		rotationSpeed -= 25; 
 		multipleSpeed -= 0.25; 
 		speedForProp.setValue(multipleSpeed + 0.25);

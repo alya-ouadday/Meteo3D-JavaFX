@@ -50,11 +50,12 @@ public class ModeHisto{
 			    	int lat = zone.getLat(); 
 			    	int lon = zone.getLon(); 
 			    	float anomalie = zone.getAnomalieAnnee(annee); 
-			    	if(anomalie != Float.NaN) {
+			    	if(anomalie < Float.MAX_VALUE) {
 	        		target = Coordonnees.geoCoordTo3dCoord(lat, lon, tailleHisto(anomalie)); 
 			    	}
 			    	else {
-			    		target = Coordonnees.geoCoordTo3dCoord(lat, lon, 2); 
+			    		target = Coordonnees.geoCoordTo3dCoord(lat, lon, 1); 
+			    		System.out.println("je le crée malgré le nan");
 			    	}
 	        		 material = echelle.getMaterialHisto(anomalie);
 	        		 Cylinder histo = createLine(origin, target); 
@@ -74,12 +75,13 @@ public class ModeHisto{
 		    		int lat = entry.getKey().getLat(); 
 			    	int lon = entry.getKey().getLon(); 
 			    	float anomalie = entry.getKey().getAnomalieAnnee(annee);
-			    	if(anomalie != Float.NaN) {
+			    	if(anomalie < Float.MAX_VALUE) {
 	        		target = Coordonnees.geoCoordTo3dCoord(lat, lon, tailleHisto(anomalie));}
 			    	else {
-			    	target = Coordonnees.geoCoordTo3dCoord(lat, lon, 2);
+			    	target = Coordonnees.geoCoordTo3dCoord(lat, lon, 1);
 			    	}
 	        		material = echelle.getMaterialHisto(anomalie);
+	        		
 		    	   Point3D diff = target.subtract(origin);
 		           double height = diff.magnitude();
 		    	   entry.getValue().setMaterial(material);

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class RecuperationDonnees {
-
+	public static int sampleNumber = 0; 
 	public static void getDataFromCSVFile(String csvFilePath, DonneesPlanete earth) {
 		
 		try {
@@ -17,7 +17,7 @@ public class RecuperationDonnees {
 			String[] firstLine = line.replace("\"", "").split(",");
 			firstLine = Arrays.copyOfRange(firstLine, 2, firstLine.length); 
 			int[] annees =  Arrays.asList(firstLine).stream().mapToInt(Integer::parseInt).toArray();
-			System.out.println(annees.length);
+			sampleNumber = annees.length;
 		    line = bufRead.readLine(); 
 			while ( line != null) {
 				String[] data =line.split(",");
