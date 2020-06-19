@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="fenetre" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="623.0" prefWidth="644.0" style="-fx-background-color: #EBF6FF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projet.controller.Controller">
+   <children>
+      <AnchorPane layoutX="32.0" prefHeight="621.0" prefWidth="599.0">
+         <children>
+            <Label layoutX="-33.0" prefHeight="72.0" prefWidth="645.0" style="-fx-background-color: #93B3CF;" text="Anomalies de température de l'année">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="100.0" />
+               </padding>
+            </Label>
+            <Label fx:id="titreAnnee" layoutX="400.0" layoutY="25.0" prefHeight="22.0" prefWidth="58.0" text="2010">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="18.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnMenu" layoutX="539.0" layoutY="13.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="63.0" style="-fx-background-color: #93B3CF;">
+               <graphic>
+                  <ImageView fitHeight="49.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Hamburger_icon.svg.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <TextField fx:id="textLat" layoutX="13.0" layoutY="104.0" prefHeight="27.0" prefWidth="41.0" style="-fx-border-color: #1C87E2;" />
+            <TextField fx:id="textLong" layoutX="13.0" layoutY="149.0" prefHeight="27.0" prefWidth="41.0" style="-fx-border-color: #1C87E2;" />
+            <Label layoutX="62.0" layoutY="104.0" prefHeight="26.0" prefWidth="52.0" text="Latitude" />
+            <Label layoutX="62.0" layoutY="147.0" prefHeight="31.0" prefWidth="63.0" text="Longitude" />
+            <TextField fx:id="textAnnee" alignment="CENTER" layoutX="17.0" layoutY="435.0" prefHeight="27.0" prefWidth="52.0" style="-fx-border-color: #1C87E2;" />
+            <Label layoutX="77.0" layoutY="440.0" prefHeight="17.0" prefWidth="41.0" text="Année" />
+            <VBox layoutX="154.0" layoutY="521.0" prefHeight="100.0" prefWidth="251.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="23.0" prefWidth="251.0" spacing="15.0">
+                     <children>
+                        <Button fx:id="btnBack" mnemonicParsing="false" style="-fx-background-color: WHITE;">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@backBtn.PNG" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="btnPlay" mnemonicParsing="false" prefHeight="38.0" prefWidth="46.0" style="-fx-background-color: WHITE;">
+                           <graphic>
+                              <ImageView fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@playBtn.PNG" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="btnFor" mnemonicParsing="false" style="-fx-background-color: WHITE;">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@forBtn.PNG" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="TOP_CENTER" prefHeight="53.0" prefWidth="251.0" spacing="20.0">
+                     <children>
+                        <Label fx:id="labelBack" alignment="CENTER" text="x 0.75">
+                           <font>
+                              <Font size="9.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Button fx:id="btnStop" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="38.0" prefWidth="46.0" style="-fx-background-color: WHITE;">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@stopBtn.PNG" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <HBox.margin>
+                              <Insets top="10.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label fx:id="labelFor" text="x1.25">
+                           <font>
+                              <Font size="9.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets left="8.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Slider fx:id="sliderAnnee" blockIncrement="1.0" cache="true" layoutX="46.0" layoutY="505.0" majorTickUnit="1.0" max="2020.0" min="1880.0" minorTickCount="0" prefHeight="22.0" prefWidth="451.0" snapToTicks="true" value="1880.0" />
+            <Label layoutX="14.0" layoutY="508.0" prefHeight="17.0" prefWidth="46.0" text="1880" />
+            <Label layoutX="497.0" layoutY="508.0" text="2020" />
+            <Pane fx:id="pane" layoutX="74.0" layoutY="92.0" prefHeight="390.0" prefWidth="412.0" />
+            <Label layoutX="472.0" layoutY="141.0" prefHeight="17.0" prefWidth="46.0" text="en C°">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <AnchorPane fx:id="echelleHisto" layoutX="470.0" layoutY="199.0" prefHeight="180.0" prefWidth="52.0" visible="false">
+               <children>
+                  <VBox prefHeight="177.0" prefWidth="25.0">
+                     <children>
+                        <Pane prefHeight="100.0" prefWidth="30.0" style="-fx-background-color: red;" />
+                        <Pane prefHeight="100.0" prefWidth="30.0" style="-fx-background-color: royalblue;" />
+                     </children>
+                  </VBox>
+                  <Label layoutX="27.0" layoutY="82.0" prefHeight="8.0" prefWidth="14.0" text="0" />
+                  <Label layoutX="27.0" layoutY="165.0" prefHeight="14.0" prefWidth="14.0" text="-6" />
+                  <Label layoutX="27.0" layoutY="-3.0" prefHeight="11.0" prefWidth="17.0" text="+8" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="echelleQuadri" layoutX="470.0" layoutY="175.0" prefHeight="221.0" prefWidth="54.0">
+               <children>
+                  <VBox layoutX="2.0" prefHeight="200.0" prefWidth="24.0">
+                     <children>
+                        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgray;" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: red;" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: DARKORANGE;" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gold;" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: LIGHTBLUE;" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: SKYBLUE;" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: ROYALBLUE;" />
+                     </children>
+                  </VBox>
+                  <Label layoutX="27.0" layoutY="187.0" prefHeight="15.0" prefWidth="12.0" text="-2" />
+                  <Label layoutX="27.0" layoutY="161.0" prefHeight="24.0" prefWidth="18.0" text="-1" />
+                  <Label layoutX="26.0" layoutY="132.0" prefHeight="33.0" prefWidth="29.0" text="-0.5" />
+                  <Label layoutX="28.0" layoutY="116.0" prefHeight="8.0" prefWidth="14.0" text="0" />
+                  <Label layoutX="28.0" layoutY="90.0" prefHeight="14.0" prefWidth="24.0" text="+0.5" />
+                  <Label layoutX="28.0" layoutY="66.0" prefHeight="14.0" prefWidth="15.0" text="+1" />
+                  <Label layoutX="28.0" layoutY="39.0" prefHeight="17.0" prefWidth="21.0" text="+2" />
+                  <Label layoutX="28.0" layoutY="16.0" prefHeight="17.0" prefWidth="18.0" text="+4" />
+                  <Label layoutX="29.0" layoutY="-8.0" prefHeight="31.0" prefWidth="29.0" text="ND*" />
+                  <Label layoutY="207.0" prefHeight="17.0" prefWidth="79.0" text="*Non disponible">
+                     <font>
+                        <Font size="8.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="menu" layoutX="431.0" layoutY="71.0" prefHeight="552.0" prefWidth="214.0" style="-fx-background-color: #D1E2F0;" visible="false">
+         <children>
+            <Label layoutY="83.0" prefHeight="35.0" prefWidth="213.0" style="-fx-background-color: #B4CADC;" text="Mode de visualisation">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutY="236.0" prefHeight="35.0" prefWidth="213.0" style="-fx-background-color: #B4CADC;" text="Graphique">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="14.0" />
+               </font>
+            </Label>
+            <VBox alignment="CENTER_LEFT" layoutX="7.0" layoutY="136.0" prefHeight="78.0" prefWidth="199.0" spacing="20.0">
+               <children>
+                  <RadioButton fx:id="btnQuadri" cache="true" mnemonicParsing="false" pickOnBounds="false" text="Quadrilatères de couleur">
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="btnHisto" mnemonicParsing="false" text="Histogrammes 3D">
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="choiceMode" />
+                     </toggleGroup>
+                  </RadioButton>
+               </children>
+            </VBox>
+            <Button fx:id="btnGraph" layoutX="48.0" layoutY="342.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="126.0" style="-fx-background-color: #6AADE5; -fx-background-radius: 15px;" text="Générer graphique">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Label alignment="TOP_LEFT" layoutX="16.0" layoutY="289.0" prefHeight="37.0" prefWidth="191.0" text="Note: Graphique modélisant l'évolution des anomalies de température pour la zone sélectionnée" wrapText="true">
+               <font>
+                  <Font name="Arial Italic" size="9.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="21.0" prefHeight="44.0" prefWidth="199.0" text="Menu" textFill="#3e68b1">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -15,10 +15,10 @@ import projet.data.Zone;
 
 public class ModeQuadri {
 
-	private static LinkedHashMap<Zone, MeshView> listeQuadri = new LinkedHashMap<Zone, MeshView>() ;
+	private static LinkedHashMap<MeshView, Zone> listeQuadri = new LinkedHashMap<MeshView, Zone>() ;
 	private static EchelleCouleur echelle = new EchelleCouleur();
 	
-    private static MeshView AddQuadrilateral(Group parent, Point3D topRight, Point3D bottomRight, Point3D bottomLeft, Point3D topLeft, PhongMaterial material)
+    private static MeshView AddQuadrilateral(Group parent, Point3D topRight, Point3D bottomRight, Point3D bottomLeft, Point3D topLeft,PhongMaterial material)
     {
         final TriangleMesh triangleMesh = new TriangleMesh();
         final float[] points = {
@@ -55,20 +55,26 @@ public class ModeQuadri {
     	for(Zone zone: zones.values()) {
     	int lat = zone.getLat(); 
     	int lon = zone.getLon(); 
-    	PhongMaterial material = echelle.getMaterialQuadri(zone.getAnomalieAnnee(annee));
-    	listeQuadri.put(zone, AddQuadrilateral(quadris, Coordonnees.geoCoordTo3dCoord(lat - 2, lon + 2, 1.05f), 
+    	PhongMaterial material = echelle.getTranspMaterial(); 
+    			//echelle.getMaterialQuadri(zone.getAnomalieAnnee(annee));
+    	listeQuadri.put(AddQuadrilateral(quadris, Coordonnees.geoCoordTo3dCoord(lat - 2, lon + 2, 1.05f), 
  	        		Coordonnees.geoCoordTo3dCoord(lat - 2, lon - 2, 1.05f),
  	        		Coordonnees.geoCoordTo3dCoord(lat + 2, lon - 2, 1.05f),
- 	        		Coordonnees.geoCoordTo3dCoord(lat + 2, lon +2, 1.05f), material ));
+ 	        		Coordonnees.geoCoordTo3dCoord(lat + 2, lon +2, 1.05f), material), zone);
     	}
     	return quadris;
     }
     
     public static void updateQuadri(int annee) {
     	PhongMaterial material; 
-    	for (Map.Entry<Zone, MeshView> entry : listeQuadri.entrySet()) {
-    	   material = echelle.getMaterialQuadri(entry.getKey().getAnomalieAnnee(annee));
-    		entry.getValue().setMaterial(material);
+    	for (Map.Entry<MeshView, Zone> entry : listeQuadri.entrySet()) {
+    	   material = echelle.getMaterialQuadri(entry.getValue().getAnomalieAnnee(annee));
+    		entry.getKey().setMaterial(material);
+    	}
+    }
+    public static void hideQuadri() {
+    	for(MeshView quadri : listeQuadri.keySet()) {
+    		quadri.setMaterial(echelle.getTranspMaterial()); 
     	}
     }
     
@@ -94,7 +100,7 @@ public class ModeQuadri {
     }
     */
     
-    public static LinkedHashMap<Zone, MeshView> getQuadris(){
+    public static LinkedHashMap<MeshView, Zone> getQuadris(){
     	return listeQuadri; 
     }
 

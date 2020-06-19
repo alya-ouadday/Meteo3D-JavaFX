@@ -103,8 +103,6 @@ public class Controller {
 	@FXML
 	private AnchorPane menu; 
 	@FXML
-	private AnchorPane fenetre; 
-	@FXML 
 	private Button btnMenu; 
 	
 	
@@ -114,10 +112,11 @@ public class Controller {
 	private int annee;
 	private boolean selected = false; 
 	private DonneesPlanete terre;
-	private boolean menuOpen = false; 
-	private SubScene window;
+	private boolean menuOpen = false; //
+	private MeshView selectedQuadri = null; 
+	
 
-
+ 
 	public Controller() {
 		terre = new DonneesPlanete("Terre"); 
 		
@@ -136,16 +135,18 @@ public class Controller {
     {	
 
 		menu.setVisible(false); 
-		fenetre.setPrefWidth(558);
 		annee = 1880;
 		Group root3D = new Group();
 		Group earth = initializeEarth(420, 388, root3D);
+		
 		Group modeVisualisation = new Group(); 
 		earth.getChildren().add(modeVisualisation);
+		
 		Group ville = new Group(); 
-		earth.getChildren().add(ville); 
+		earth.getChildren().add(ville);
+	
+		
 		//mnemonicParsing="false" 
-		window= new SubScene(fenetre, fenetre.getPrefHeight(), fenetre.getPrefWidth(), true, SceneAntialiasing.BALANCED);
 			
 		Animation animation = new Animation(sliderAnnee, earth ); 
 		//Graphique graph = new Graphique(); 
@@ -154,8 +155,14 @@ public class Controller {
 		ModeHisto.setEchelleCouleur();
 		HashMap<String, Zone> zones= terre.getListeZones();
 		
+		
 		Group quadri = ModeQuadri.initQuadri(zones, annee); 
 		Group histos = ModeHisto.initHistos(zones, annee);//
+		earth.getChildren().add(quadri);
+		
+		
+		
+	
 		
 		
 		
@@ -166,17 +173,19 @@ public class Controller {
 			if(btnQuadri.isSelected()) {
 			btnHisto.setSelected(false);
 			modeVisualisation.getChildren().clear();
-			modeVisualisation.getChildren().add(quadri);
+			ModeQuadri.updateQuadri(annee);
 			echelleQuadri.setVisible(true);
 			echelleHisto.setVisible(false);}
 			else {
-				modeVisualisation.getChildren().clear();
+				ModeQuadri.hideQuadri();
 				echelleQuadri.setVisible(false);
+
 			}
 		});
         
 		btnHisto.setOnAction(event -> {
 			if(btnHisto.isSelected()) {
+			ModeQuadri.hideQuadri();
 			btnQuadri.setSelected(false);
 			modeVisualisation.getChildren().clear();
 			modeVisualisation.getChildren().add(histos);
@@ -189,7 +198,7 @@ public class Controller {
 			}
 		});
 		textAnnee.textProperty().bindBidirectional(sliderAnnee.valueProperty(),new NumberStringConverter());
-
+		titreAnnee.textProperty().bind(sliderAnnee.valueProperty().asString());
 	
 		
 		btnPlay.setOnAction(event ->     {  
@@ -197,7 +206,6 @@ public class Controller {
 			//animation.getTimer().start();
 			animation.setPlay(btnPlay); 
 			//btnPlay.setGraphic(new ImageView(imagePause));
-			menu.setVisible(true);
 		}
         
 		else {
@@ -233,17 +241,16 @@ public class Controller {
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) 
 	        {
 	        	modeVisualisation.getChildren().clear();
+	        	ModeQuadri.hideQuadri();
 	        	annee = newValue.intValue();
 				 
 				if(btnQuadri.isSelected()) {
-					selected = false; 
+					//selected = false; 
 					ModeQuadri.updateQuadri(annee);
-					modeVisualisation.getChildren().add(quadri); 
-
 				}
 				
 				if(btnHisto.isSelected()) {
-					selected = false;
+					//selected = false;
 					//ModeHisto.initHist(zones, annee, modeVisualisation)
 					ModeHisto.updateHistos(annee);//
 					modeVisualisation.getChildren().add(histos);//
@@ -255,29 +262,33 @@ public class Controller {
 		
 		earth.setOnMouseMoved(event -> {
 			if(!selected) {
-				
-				Point2D point = event.getPickResult().getIntersectedTexCoord();
-				int lat = Coordonnees.from3DtoLat(point);
-				int lon = Coordonnees.from3DtoLon(point);
-			 
-				textLat.setText("" + lat );
-				textLong.setText("" + lon);
-				
-			 
+				try {
+				System.out.println(event.getPickResult().getIntersectedNode());
+				selectedQuadri = (MeshView) event.getPickResult().getIntersectedNode();
+					textLat.setText("" + ModeQuadri.getQuadris().get(selectedQuadri).getLat() );
+					textLong.setText(""+ ModeQuadri.getQuadris().get(selectedQuadri).getLon());
+				}catch(Exception e) {
+					
+				}
 			}
 		});
 		
 		earth.setOnMouseClicked(event -> {
 			System.out.println(event.getPickResult().getIntersectedNode());
+			//selectedQuadri (MeshView) event.getPickResult().getIntersectedNode();
+			int lat = ModeQuadri.getQuadris().get(selectedQuadri).getLat();
+			int lon = ModeQuadri.getQuadris().get(selectedQuadri).getLon();
+			//textLat.setText("" + lat);
+			//textLong.setText(""+ ModeQuadri.getQuadris().get(quadriSelect).getLon());
 			
 			if((!selected)&& (event.getClickCount() == 2)) {
 			ville.getChildren().clear();
-			 Point2D point = event.getPickResult().getIntersectedTexCoord();
-			 Point3D point3D = event.getPickResult().getIntersectedPoint();
-			 Coordonnees.afficheZone(ville, point3D); 
-				textLat.setText("" + Coordonnees.from3DtoLat(point) );
-				textLong.setText(""+ Coordonnees.from3DtoLon(point));
-				selected = true; }
+			System.out.println(lat + " " + lon);
+			//ville.toBack();
+			 Coordonnees.afficheZone(ville, lat, lon); 
+			 //ville.toBack(); 
+			 
+			 selected = true; }
 			else if (selected && (event.getClickCount() == 2)) {
 				ville.getChildren().clear();
 				selected = false;
@@ -286,14 +297,8 @@ public class Controller {
 	
 		btnGraph.setOnAction(new EventHandler<ActionEvent>() {
 		    public void handle(ActionEvent event) {
-		    	try {
-		    	int lat = Integer.parseInt(textLat.getText());
-				int lon = Integer.parseInt(textLong.getText());
-		    	
-		    	Zone zone = terre.getZone(lat, lon);
-		        if(zone == null) {
-		        	zone = Coordonnees.zonePluroche(terre, lat, lon);
-		        }
+		    	if(selectedQuadri != null) {
+		    	Zone zone = ModeQuadri.getQuadris().get(selectedQuadri);
 		        HashMap<Integer, Float> anomalies = zone.getAnomalies();
 				Graphique graph = new Graphique(anomalies); 
 				LineChart linechart = graph.getLineChart(); 
@@ -302,11 +307,7 @@ public class Controller {
 
 				stage.setScene(new Scene(linechart,700,400));
 				stage.show();
-		    	}catch(NumberFormatException e) {
-		    		if(!textLong.getText().isEmpty()) {
-		    		textLat.clear();
-		    		textLong.clear(); }
-		    	}
+		    	}	
 		    }
 
 		});
@@ -345,11 +346,10 @@ public class Controller {
 			if(!menuOpen) {
 				menuOpen = true; 
 				menu.setVisible(true);
-				fenetre.setPrefWidth(830);
-				window.setWidth(830);
-				root3D.prefWidth(830);
-				
-			
+			}
+			else {
+				menuOpen = false; 
+				menu.setVisible(false);
 			}
 		});
 		

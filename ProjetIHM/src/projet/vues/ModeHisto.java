@@ -50,7 +50,7 @@ public class ModeHisto{
 			    	int lat = zone.getLat(); 
 			    	int lon = zone.getLon(); 
 			    	float anomalie = zone.getAnomalieAnnee(annee); 
-			    	if(anomalie < Float.MAX_VALUE) {
+			    	if(!Float.isNaN(anomalie)) {
 	        		target = Coordonnees.geoCoordTo3dCoord(lat, lon, tailleHisto(anomalie)); 
 			    	}
 			    	else {
@@ -136,6 +136,8 @@ public class ModeHisto{
 	 }
 	 
 	 public static float tailleHisto(float anomalie) {
-		 return (Math.abs(anomalie)/10) + 1; 
+		 float taille = (Math.abs(anomalie)/10) + 1; 
+		
+		 return Math.round(taille*100.0)/100.0f;
 	 }
 }

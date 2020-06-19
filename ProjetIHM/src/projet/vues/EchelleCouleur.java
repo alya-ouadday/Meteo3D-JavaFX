@@ -68,6 +68,12 @@ public class EchelleCouleur {
         grayMat.setDiffuseColor(gray);
         grayMat.setSpecularColor(gray);
         echelle.put("gray", grayMat); 
+        
+        final PhongMaterial transparent = new PhongMaterial();
+        Color transp =Color.rgb(80, 80, 80);
+        transparent.setDiffuseColor(transp);
+        transparent.setSpecularColor(transp);
+        echelle.put("gray", grayMat); 
 	}
 	
 	public PhongMaterial getMaterialQuadri(float anomalie) {
@@ -106,7 +112,9 @@ public class EchelleCouleur {
 		return material; 
 	}
 	
-	
+	public PhongMaterial getTranspMaterial() {
+		return echelle.get("gray"); 
+	}
 	public void setEchelleHisto() {
 		final PhongMaterial redMat = new PhongMaterial();
         Color red = Color.rgb(255, 0, 0);
@@ -125,6 +133,8 @@ public class EchelleCouleur {
         grayMat.setDiffuseColor(gray);
         grayMat.setSpecularColor(gray);
         echelle.put("gray", grayMat); 
+        
+       
 		
 	}
 	public PhongMaterial getMaterialHisto(float anomalie) {
