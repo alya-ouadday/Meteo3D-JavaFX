@@ -3,6 +3,7 @@ package projet.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,13 +70,19 @@ public class Controller {
 	@FXML
 	private TextField textLat;
 	@FXML
-	private TextField textLong; 
+	private TextField textLong;
+	@FXML
+	private Label erreurCoor; 
+	@FXML
+	private Label de; 
 	@FXML
 	private TextField textAnnee; 
 	@FXML
 	private RadioButton btnQuadri; 
 	@FXML
 	private RadioButton btnHisto;
+	@FXML
+	private RadioButton btnAucun;
 	@FXML
 	private  Button btnPlay;  
 	@FXML
@@ -100,23 +107,17 @@ public class Controller {
 	private AnchorPane echelleQuadri;
 	@FXML
 	private AnchorPane echelleHisto; 
+
 	@FXML
 	private AnchorPane menu; 
 	@FXML
 	private Button btnMenu; 
-	
-	
-	Image imagePause = new Image(getClass().getResourceAsStream("/projet/vues/vuesBoutons/pauseBtn.PNG"), 30, 30, false, false);
-	Image imagePlay = new Image(getClass().getResourceAsStream("/projet/vues/vuesBoutons/playBtn.PNG"),30, 30, false, false);
-
 	private int annee;
 	private boolean selected = false; 
 	private DonneesPlanete terre;
-	private boolean menuOpen = false; //
+	private boolean menuOpen = false; 
 	private MeshView selectedQuadri = null; 
 	
-
- 
 	public Controller() {
 		terre = new DonneesPlanete("Terre"); 
 		
@@ -133,9 +134,7 @@ public class Controller {
 	@FXML
 	public void initialize()
     {	
-
-		menu.setVisible(false); 
-		annee = 1880;
+		annee = 1880; 
 		Group root3D = new Group();
 		Group earth = initializeEarth(420, 388, root3D);
 		
@@ -144,75 +143,78 @@ public class Controller {
 		
 		Group ville = new Group(); 
 		earth.getChildren().add(ville);
-	
-		
-		//mnemonicParsing="false" 
 			
 		Animation animation = new Animation(sliderAnnee, earth ); 
-		//Graphique graph = new Graphique(); 
 		
 		ModeQuadri.setEchelleCouleur();
 		ModeHisto.setEchelleCouleur();
+		
 		HashMap<String, Zone> zones= terre.getListeZones();
 		
 		
 		Group quadri = ModeQuadri.initQuadri(zones, annee); 
-		Group histos = ModeHisto.initHistos(zones, annee);//
+		Group histos = ModeHisto.initHistos(zones, annee);
+		
 		earth.getChildren().add(quadri);
-		
-		
-		
-	
-		
-		
-		
+
 		labelFor.textProperty().bind(animation.getSpeedForProp().asString());
 		labelBack.textProperty().bind(animation.getSpeedBackProp().asString());
 		
 		btnQuadri.setOnAction(event -> {
-			if(btnQuadri.isSelected()) {
-			btnHisto.setSelected(false);
-			modeVisualisation.getChildren().clear();
-			ModeQuadri.updateQuadri(annee);
-			echelleQuadri.setVisible(true);
-			echelleHisto.setVisible(false);}
-			else {
-				ModeQuadri.hideQuadri();
-				echelleQuadri.setVisible(false);
 
-			}
+				modeVisualisation.getChildren().clear();
+				ModeQuadri.updateQuadri(annee);
+				echelleQuadri.setVisible(true);
+				echelleHisto.setVisible(false);
+		
 		});
         
 		btnHisto.setOnAction(event -> {
-			if(btnHisto.isSelected()) {
-			ModeQuadri.hideQuadri();
-			btnQuadri.setSelected(false);
-			modeVisualisation.getChildren().clear();
-			modeVisualisation.getChildren().add(histos);
-			echelleQuadri.setVisible(false);
-			echelleHisto.setVisible(true);}//
-			//ModeHisto.initHist(zones, annee, modeVisualisation);
-			else {
+				ModeQuadri.hideQuadri();
 				modeVisualisation.getChildren().clear();
-				echelleHisto.setVisible(false);
+				modeVisualisation.getChildren().add(histos);
+				echelleQuadri.setVisible(false);
+				echelleHisto.setVisible(true);
+
+		});
+		
+		btnAucun.setOnAction(event ->{
+			ModeQuadri.hideQuadri();
+			modeVisualisation.getChildren().clear();
+			echelleQuadri.setVisible(false);
+			echelleHisto.setVisible(false);
+		});
+		textAnnee.setOnKeyTyped(event -> {
+			try {
+				Integer.parseInt(textAnnee.getText());
+			}catch(Exception e) {
+				textAnnee.clear();
+				System.out.println("je passe ici setonkeytyped");
 			}
 		});
-		textAnnee.textProperty().bindBidirectional(sliderAnnee.valueProperty(),new NumberStringConverter());
-		titreAnnee.textProperty().bind(sliderAnnee.valueProperty().asString());
-	
 		
+		try {
+		textAnnee.textProperty().bindBidirectional(sliderAnnee.valueProperty(),new NumberStringConverter());
+		}catch(Exception e) {
+			textAnnee.clear();
+			System.out.println("je passe ici binding");
+		}
+		
+		titreAnnee.textProperty().bind(textAnnee.textProperty());
+	
+	
 		btnPlay.setOnAction(event ->     {  
-		if(!animation.getPlay()) {
-			//animation.getTimer().start();
-			animation.setPlay(btnPlay); 
-			//btnPlay.setGraphic(new ImageView(imagePause));
-		}
-        
-		else {
-			//animation.getTimer().stop();
-			animation.setPause(btnPlay);
-			//btnPlay.setGraphic(new ImageView(imagePlay));
-		}
+			if(!animation.getPlay()) {
+				animation.setPlay(btnPlay); 
+				btnFor.setDisable(false);
+				btnBack.setDisable(false);
+			}
+	        
+			else {
+				animation.setPause(btnPlay);
+				btnFor.setDisable(true);
+				btnBack.setDisable(true);
+			}
 		});
 		
 		btnFor.setOnAction(event ->{
@@ -225,16 +227,15 @@ public class Controller {
 		});
 		
 		btnStop.setOnAction(event -> {
-			//animation.getTimer().stop();
 			animation.setPause(btnPlay);
 			animation.reset();
 			sliderAnnee.setValue(1880);
-			
-			
+			btnFor.setDisable(true);
+			btnBack.setDisable(true);
+		
 		});
 		
-	
-		
+
 		sliderAnnee.valueProperty().addListener(new ChangeListener<Number>() 
 		{
 	        @Override
@@ -243,90 +244,119 @@ public class Controller {
 	        	modeVisualisation.getChildren().clear();
 	        	ModeQuadri.hideQuadri();
 	        	annee = newValue.intValue();
+	        	
 				 
 				if(btnQuadri.isSelected()) {
-					//selected = false; 
 					ModeQuadri.updateQuadri(annee);
 				}
 				
 				if(btnHisto.isSelected()) {
-					//selected = false;
-					//ModeHisto.initHist(zones, annee, modeVisualisation)
-					ModeHisto.updateHistos(annee);//
-					modeVisualisation.getChildren().add(histos);//
-	
-					
+					ModeHisto.updateHistos(annee);
+					modeVisualisation.getChildren().add(histos);		
 				}
+				sliderAnnee.setValue(annee);
 			}
 		});
 		
 		earth.setOnMouseMoved(event -> {
 			if(!selected) {
 				try {
-				System.out.println(event.getPickResult().getIntersectedNode());
 				selectedQuadri = (MeshView) event.getPickResult().getIntersectedNode();
 					textLat.setText("" + ModeQuadri.getQuadris().get(selectedQuadri).getLat() );
 					textLong.setText(""+ ModeQuadri.getQuadris().get(selectedQuadri).getLon());
 				}catch(Exception e) {
 					
 				}
-			}
+		   }
 		});
 		
 		earth.setOnMouseClicked(event -> {
-			System.out.println(event.getPickResult().getIntersectedNode());
-			//selectedQuadri (MeshView) event.getPickResult().getIntersectedNode();
 			int lat = ModeQuadri.getQuadris().get(selectedQuadri).getLat();
 			int lon = ModeQuadri.getQuadris().get(selectedQuadri).getLon();
-			//textLat.setText("" + lat);
-			//textLong.setText(""+ ModeQuadri.getQuadris().get(quadriSelect).getLon());
-			
-			if((!selected)&& (event.getClickCount() == 2)) {
-			ville.getChildren().clear();
-			System.out.println(lat + " " + lon);
-			//ville.toBack();
-			 Coordonnees.afficheZone(ville, lat, lon); 
-			 //ville.toBack(); 
-			 
-			 selected = true; }
+
+			if(!selected &&(event.getClickCount() == 2)) {
+				ville.getChildren().clear();
+				System.out.println(lat + " " + lon);
+				Coordonnees.afficheZone(ville, lat, lon); 
+				selected = true;
+				de.setVisible(true);
+			}
 			else if (selected && (event.getClickCount() == 2)) {
 				ville.getChildren().clear();
 				selected = false;
+				de.setVisible(false);
 			}
 		});
 	
 		btnGraph.setOnAction(new EventHandler<ActionEvent>() {
 		    public void handle(ActionEvent event) {
 		    	if(selectedQuadri != null) {
-		    	Zone zone = ModeQuadri.getQuadris().get(selectedQuadri);
-		        HashMap<Integer, Float> anomalies = zone.getAnomalies();
-				Graphique graph = new Graphique(anomalies); 
-				LineChart linechart = graph.getLineChart(); 
-				Stage stage = new Stage();
-				stage.setTitle("Evolution des anomalies pour la zone "+ zone.toString()+ " entre 1880 et 2020");
-
-				stage.setScene(new Scene(linechart,700,400));
-				stage.show();
+		    		
+			    	Zone zone = ModeQuadri.getQuadris().get(selectedQuadri);
+					Graphique graph = new Graphique(zone); 
+					LineChart linechart = graph.getLineChart(); 
+					Stage stage = new Stage();
+					stage.setTitle("Evolution des anomalies pour la zone "+ zone.toString()+ " entre 1880 et 2020");
+					stage.setScene(new Scene(linechart,700,400));
+					stage.show();
 		    	}	
 		    }
 
 		});
 		
+		btnGraph.setOnMouseReleased(event -> {
+			btnGraph.setOpacity(1);
+		});
+		btnGraph.setOnMousePressed(event -> {
+			if(selectedQuadri != null)
+			btnGraph.setOpacity(0.5);
+		});
+		
 		textLat.setOnKeyReleased(event -> {
 			ville.getChildren().clear();
 			selected = true; 
-			if(!textLong.getText().isEmpty()) {
 				try {
 					int lat = Integer.parseInt(textLat.getText());
-					int lon = Integer.parseInt(textLong.getText());
-					Coordonnees.afficheZone(ville, lat, lon);
+					if(lat > 90 || lat < -90 ) {
+						erreurCoor.setVisible(true);
+					}
+					else {
+						
+						erreurCoor.setVisible(false);
+						if(!textLong.getText().isEmpty()) {				
+							int lon = Integer.parseInt(textLong.getText());
+							Coordonnees.afficheZone(ville, lat, lon);
+						}
+					}
 				}catch(NumberFormatException e) {
+					if(textLat.getText() != "-")
 					textLat.clear();
 					
-				}
-			}
+				}	
 		});
 		
+		textLong.setOnKeyReleased(event -> {
+			ville.getChildren().clear();
+			selected = true; 
+				try {
+					int lon= Integer.parseInt(textLong.getText());
+					if(lon > 180 || lon < -180 ) {
+						erreurCoor.setVisible(true);
+					}
+					else {
+						erreurCoor.setVisible(false);
+						if(!textLat.getText().isEmpty()) {				
+							int lat = Integer.parseInt(textLat.getText());
+							Coordonnees.afficheZone(ville, lat, lon);
+						}
+					}
+				}catch(NumberFormatException e) {
+					if(textLong.getText() != "-")
+					textLong.clear();
+					
+				}	
+		});
+		/*
 		textLong.setOnKeyReleased(event -> {
 			selected = true; 
 			ville.getChildren().clear();
@@ -336,11 +366,12 @@ public class Controller {
 					int lon = Integer.parseInt(textLong.getText());
 					Coordonnees.afficheZone(ville, lat, lon);
 				}catch(NumberFormatException e) {
+					if(textLong.getText() != "-")
 					textLong.clear();
 					
 				}
 			}
-		});
+		});*/
 		
 		btnMenu.setOnAction(event -> {
 			if(!menuOpen) {
@@ -352,6 +383,8 @@ public class Controller {
 				menu.setVisible(false);
 			}
 		});
+		
+
 		
 
     }
@@ -373,15 +406,8 @@ public class Controller {
 	        
 	}
 	
-	public void setLight(Group root3D, int x, int y, int z) {
-		
-		/*PointLight light = new PointLight(Color.WHITE);
-        light.setTranslateX(x); //-180
-        light.setTranslateY(y); //-75
-        light.setTranslateZ(z); //-120
-        light.getScope().addAll(root3D);
-        root3D.getChildren().add(light);*/  
-        // Add ambient light
+	public void setLight(Group root3D) {
+
         AmbientLight ambientLight = new AmbientLight(Color.WHITE);
         ambientLight.getScope().addAll(root3D);
         root3D.getChildren().add(ambientLight);
@@ -398,7 +424,7 @@ public class Controller {
         // Load geometry 
         Group earth = loadEarth(root3D); 
         // Add point light
-        setLight(root3D, -180, -90, -120);
+        setLight(root3D);
         //add group Camera 
         PerspectiveCamera camera = setCamera(root3D); 
         //create subScene 363 50
@@ -408,12 +434,7 @@ public class Controller {
 	    return earth; 
 	}
 	
-	public boolean getMenu() {
-		return menuOpen; 
-	}
-	public void setSize(Stage stage) {
-		stage.setWidth(830);
-	}
+
 	
 }
 

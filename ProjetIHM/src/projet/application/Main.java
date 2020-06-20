@@ -21,7 +21,6 @@ public class Main extends Application{
 		try 
 		{
 			Parent root = FXMLLoader.load(getClass().getResource("/projet/vues/Vuesbisbis.fxml"));
-			//Scene scene = new Scene(root); 
 			stage.setScene(new Scene(root));
 			stage.setTitle("Global Warming 3D"); 
 			stage.show();
@@ -36,12 +35,6 @@ public class Main extends Application{
 	
 	public static void main(String[] args) {
 		launch(args);
-	/*
-	terre.getAnomalieZoneAnnee(12, 154, 1881); 
-	System.out.println(terre.getAnomalieMax());
-	System.out.println(terre.getAnomalieMin()); 
-	terre.getAnomaliesZone(12, 154);
-	terre.getAnomaliesAnnee(1952); */
-	
+
 	}
 }

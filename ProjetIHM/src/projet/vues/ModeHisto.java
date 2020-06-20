@@ -44,100 +44,54 @@ public class ModeHisto{
 		 public static Group initHistos(HashMap<String, Zone> zones, int annee) {
 		    	Group histos = new Group(); 
 		    	Point3D origin = Coordonnees.geoCoordTo3dCoord(0, 0, 0); 
+		    	
 		    	PhongMaterial material ;  
 		    	Point3D target; 
+		    	
 		    	for(Zone zone: zones.values()) {
 			    	int lat = zone.getLat(); 
 			    	int lon = zone.getLon(); 
 			    	float anomalie = zone.getAnomalieAnnee(annee); 
 			    	if(!Float.isNaN(anomalie)) {
-	        		target = Coordonnees.geoCoordTo3dCoord(lat, lon, tailleHisto(anomalie)); 
+			    		target = Coordonnees.geoCoordTo3dCoord(lat, lon, tailleHisto(anomalie)); 
 			    	}
 			    	else {
 			    		target = Coordonnees.geoCoordTo3dCoord(lat, lon, 1); 
-			    		System.out.println("je le crée malgré le nan");
 			    	}
 	        		 material = echelle.getMaterialHisto(anomalie);
 	        		 Cylinder histo = createLine(origin, target); 
-	        		 histo.setMaterial(material);
+	        		 histo.setMaterial(material)
+	        		 ;
 			    	 listeHistos.put(zone, histo); 
 			    	 histos.getChildren().add(histo); 
 		    	}
 		    	return histos;
 		 }
 		 
-		 public static void updateHistos(int annee) {
-			 long startTime = System.nanoTime(); 
+		 public static void updateHistos(int annee) { 
 			 Point3D origin = Coordonnees.geoCoordTo3dCoord(0, 0, 0); 
 			 Point3D target;
-		    	PhongMaterial material; 
-		    	for (Map.Entry<Zone, Cylinder> entry : listeHistos.entrySet()) {
-		    		int lat = entry.getKey().getLat(); 
-			    	int lon = entry.getKey().getLon(); 
-			    	float anomalie = entry.getKey().getAnomalieAnnee(annee);
-			    	if(anomalie < Float.MAX_VALUE) {
-	        		target = Coordonnees.geoCoordTo3dCoord(lat, lon, tailleHisto(anomalie));}
-			    	else {
-			    	target = Coordonnees.geoCoordTo3dCoord(lat, lon, 1);
-			    	}
-	        		material = echelle.getMaterialHisto(anomalie);
-	        		
-		    	   Point3D diff = target.subtract(origin);
-		           double height = diff.magnitude();
-		    	   entry.getValue().setMaterial(material);
-		    	   entry.getValue().setHeight(height);;
-		    	   
-		    	}
-		    	long endTime   = System.nanoTime();
-				double totalTime = (endTime - startTime) / 1000000000.0;
-				System.out.println("temps d'execution updateHisto pour l'annee " + annee + ": " + totalTime);
+		     PhongMaterial material; 
+		     
+		     for (Map.Entry<Zone, Cylinder> entry : listeHistos.entrySet()) {
+			     int lat = entry.getKey().getLat(); 
+				 int lon = entry.getKey().getLon(); 
+				 
+				 float anomalie = entry.getKey().getAnomalieAnnee(annee);
+				 
+		         target = Coordonnees.geoCoordTo3dCoord(lat, lon, tailleHisto(anomalie));
+		         material = echelle.getMaterialHisto(anomalie);
+		        		
+			     Point3D diff = target.subtract(origin);
+			     double height = diff.magnitude();
+			     entry.getValue().setMaterial(material);
+			     entry.getValue().setHeight(height);	   
 		    }
-    public static void setModeHisto(DonneesPlanete terre, int annee,  Group modeVisualisation) {
-    	long startTime = System.nanoTime(); 
-    	Point3D origin = Coordonnees.geoCoordTo3dCoord(0, 0, 0); 
-    	PhongMaterial material ;  
-    	Point3D target; 
-    	for(int lat = -88; lat <92; lat+=4) {
-        	for(int lon = -178; lon<182; lon+=4) {
-        		float anomalie = terre.getAnomalieZoneAnnee(lat, lon, annee); 
-        		target = Coordonnees.geoCoordTo3dCoord(lat, lon, anomalie); 
-        		 material = echelle.getMaterialHisto(anomalie);
-        		 Cylinder histo = createLine(origin, target); 
-        		 histo.setMaterial(material);
-        		 modeVisualisation.getChildren().add(histo); 
-        	}
-    	}
-    	long endTime   = System.nanoTime();
-		double totalTime = (endTime - startTime) / 1000000000.0;
-		System.out.println("temps d'execution setModeHisto: " + totalTime);
-	
-    }
-    
-    
-	 public static void initHist(HashMap<String, Zone> zones, int annee, Group modeVisualisation) {
-		 long startTime = System.nanoTime(); 
-	    	Point3D origin = Coordonnees.geoCoordTo3dCoord(0, 0, 0); 
-	    	PhongMaterial material ;  
-	    	Point3D target; 
-	    	for(Zone zone: zones.values()) {
-		    	int lat = zone.getLat(); 
-		    	int lon = zone.getLon(); 
-		    	float anomalie = zone.getAnomalieAnnee(annee); 
-     		target = Coordonnees.geoCoordTo3dCoord(lat, lon, tailleHisto(anomalie)); 
-     		 material = echelle.getMaterialHisto(anomalie);
-     		 Cylinder histo = createLine(origin, target); 
-     		 histo.setMaterial(material);
-		    modeVisualisation.getChildren().add(histo); 
-	    	}
-	    	long endTime   = System.nanoTime();
-			double totalTime = (endTime - startTime) / 1000000000.0;
-			System.out.println("temps d'execution initModeHisto: " + totalTime);
-	    	
-	 }
+		 }
+
 	 
 	 public static float tailleHisto(float anomalie) {
 		 float taille = (Math.abs(anomalie)/10) + 1; 
-		
 		 return Math.round(taille*100.0)/100.0f;
 	 }
 }

@@ -12,8 +12,8 @@ import javafx.scene.image.ImageView;
 
 public class Animation  {
 
-	private Image imagePause = new Image(getClass().getResourceAsStream("/projet/vues/vuesBoutons/pauseBtn.PNG"), 30, 30, false, false);
-	private Image imagePlay = new Image(getClass().getResourceAsStream("/projet/vues/vuesBoutons/playBtn.PNG"), 30, 30, false, false);
+	private Image imagePause = new Image(getClass().getResourceAsStream("/projet/vues/vuesBoutons/btnPause.PNG"), 41, 38, false, false);
+	private Image imagePlay = new Image(getClass().getResourceAsStream("/projet/vues/vuesBoutons/btnPlay.PNG"), 41, 38, false, false);
 	private  int rotationSpeed ; 
 	private float multipleSpeed;
 	private FloatProperty speedForProp;

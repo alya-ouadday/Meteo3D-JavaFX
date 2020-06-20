@@ -208,16 +208,13 @@
                         <Font name="Arial" size="12.0" />
                      </font>
                   </RadioButton>
-                  <RadioButton fx:id="btnHisto" mnemonicParsing="false" text="Histogrammes 3D">
+                  <RadioButton fx:id="btnHisto" mnemonicParsing="false" pickOnBounds="false" text="Histogrammes 3D">
                      <VBox.margin>
                         <Insets left="20.0" />
                      </VBox.margin>
                      <font>
                         <Font name="Arial" size="12.0" />
                      </font>
-                     <toggleGroup>
-                        <ToggleGroup fx:id="choiceMode" />
-                     </toggleGroup>
                   </RadioButton>
                </children>
             </VBox>

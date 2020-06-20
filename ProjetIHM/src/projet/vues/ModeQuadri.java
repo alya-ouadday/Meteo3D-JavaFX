@@ -56,7 +56,7 @@ public class ModeQuadri {
     	int lat = zone.getLat(); 
     	int lon = zone.getLon(); 
     	PhongMaterial material = echelle.getTranspMaterial(); 
-    			//echelle.getMaterialQuadri(zone.getAnomalieAnnee(annee));
+   
     	listeQuadri.put(AddQuadrilateral(quadris, Coordonnees.geoCoordTo3dCoord(lat - 2, lon + 2, 1.05f), 
  	        		Coordonnees.geoCoordTo3dCoord(lat - 2, lon - 2, 1.05f),
  	        		Coordonnees.geoCoordTo3dCoord(lat + 2, lon - 2, 1.05f),
@@ -78,28 +78,7 @@ public class ModeQuadri {
     	}
     }
     
-    /*
-    
-    public static void setModeQuadri(DonneesPlanete terre, int annee, Group groupQuadri) {
-    	long startTime = System.nanoTime(); 
-    	for(int lat = -88; lat <92; lat+=4) {
-        	for(int lon = -178; lon<182; lon+=4) {
-        		float anomalie = terre.getAnomalieZoneAnnee(lat, lon, annee); 
-        		PhongMaterial material = EchelleCouleur.getMaterialQuadri(anomalie);
 
-        		 AddQuadrilateral(groupQuadri, Coordonnees.geoCoordTo3dCoord(lat - 2, lon + 2, 1.05f), 
-      	        		Coordonnees.geoCoordTo3dCoord(lat - 2, lon - 2, 1.05f),
-      	        		Coordonnees.geoCoordTo3dCoord(lat + 2, lon - 2, 1.05f),
-      	        		Coordonnees.geoCoordTo3dCoord(lat + 2, lon +2, 1.05f), material );
-        	}		
-    	}
-    	
-    	long endTime   = System.nanoTime();
-		double totalTime = (endTime - startTime) / 1000000000.0;
-		System.out.println("temps d'execution setMode: " + totalTime);
-    }
-    */
-    
     public static LinkedHashMap<MeshView, Zone> getQuadris(){
     	return listeQuadri; 
     }
