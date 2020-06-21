@@ -66,9 +66,8 @@ public class ModeQuadri {
     }
     
     public static void updateQuadri(int annee) {
-    	PhongMaterial material; 
     	for (Map.Entry<MeshView, Zone> entry : listeQuadri.entrySet()) {
-    	   material = echelle.getMaterialQuadri(entry.getValue().getAnomalieAnnee(annee));
+    		PhongMaterial material = echelle.getMaterialQuadri(entry.getValue().getAnomalieAnnee(annee));
     		entry.getKey().setMaterial(material);
     	}
     }

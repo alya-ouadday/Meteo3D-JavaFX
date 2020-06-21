@@ -21,7 +21,7 @@ public class Animation  {
 	private static final int SPEEDMAX = 500;
 	private static final int SPEEDMIN = 10; 
 	private static final int INITIAL_SPEED = 100; 
-	private int angle ; 
+	private float angle ; 
 	private AnimationTimer timer; 
 	private boolean play; 
 	
@@ -40,7 +40,7 @@ public class Animation  {
 		        	double t = (currentNanoTime - startNanoTime)/ 1000000000.0; 
 		        	earth.setRotationAxis(new Point3D(0,1,0));
 		        	earth.setRotate(rotationSpeed*t); 
-		        	if(rotationSpeed*t / (360*angle) >= 1) {
+		        	if(rotationSpeed*t / (360*angle) >= 1 ) {
 			            if(sliderAnnee.getValue() < 2020) {
 			        	sliderAnnee.setValue(sliderAnnee.getValue()+1);
 			        	angle ++; 
@@ -65,7 +65,7 @@ public class Animation  {
 		multipleSpeed += 0.25; 
 		speedForProp.setValue(multipleSpeed + 0.25);
 		speedBackProp.setValue(multipleSpeed - 0.25);
-		System.out.println(multipleSpeed + " prop : " + speedForProp);
+		angle = angle + (25*angle)/rotationSpeed;
 		}
 
 	}

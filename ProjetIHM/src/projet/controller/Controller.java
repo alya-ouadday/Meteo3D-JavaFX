@@ -162,19 +162,19 @@ public class Controller {
 		
 		btnQuadri.setOnAction(event -> {
 
-				modeVisualisation.getChildren().clear();
-				ModeQuadri.updateQuadri(annee);
-				echelleQuadri.setVisible(true);
-				echelleHisto.setVisible(false);
+			modeVisualisation.getChildren().clear();
+			ModeQuadri.updateQuadri(annee);
+			echelleQuadri.setVisible(true);
+			echelleHisto.setVisible(false);
 		
 		});
         
 		btnHisto.setOnAction(event -> {
-				ModeQuadri.hideQuadri();
-				modeVisualisation.getChildren().clear();
-				modeVisualisation.getChildren().add(histos);
-				echelleQuadri.setVisible(false);
-				echelleHisto.setVisible(true);
+			ModeQuadri.hideQuadri();
+			modeVisualisation.getChildren().clear();
+			modeVisualisation.getChildren().add(histos);
+			echelleQuadri.setVisible(false);
+			echelleHisto.setVisible(true);
 
 		});
 		
@@ -241,20 +241,17 @@ public class Controller {
 	        @Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) 
 	        {
-	        	modeVisualisation.getChildren().clear();
-	        	ModeQuadri.hideQuadri();
 	        	annee = newValue.intValue();
-	        	
-				 
+	        	sliderAnnee.setValue(annee);
+	        			 
 				if(btnQuadri.isSelected()) {
 					ModeQuadri.updateQuadri(annee);
 				}
 				
 				if(btnHisto.isSelected()) {
-					ModeHisto.updateHistos(annee);
-					modeVisualisation.getChildren().add(histos);		
+					ModeHisto.updateHistos(annee);	
 				}
-				sliderAnnee.setValue(annee);
+				
 			}
 		});
 		
@@ -271,6 +268,7 @@ public class Controller {
 		});
 		
 		earth.setOnMouseClicked(event -> {
+			if(selectedQuadri != null) {
 			int lat = ModeQuadri.getQuadris().get(selectedQuadri).getLat();
 			int lon = ModeQuadri.getQuadris().get(selectedQuadri).getLon();
 
@@ -285,6 +283,7 @@ public class Controller {
 				ville.getChildren().clear();
 				selected = false;
 				de.setVisible(false);
+			}
 			}
 		});
 	
@@ -312,7 +311,7 @@ public class Controller {
 			btnGraph.setOpacity(0.5);
 		});
 		
-		textLat.setOnKeyReleased(event -> {
+		textLat.setOnKeyTyped(event -> {
 			ville.getChildren().clear();
 			selected = true; 
 				try {
@@ -329,13 +328,13 @@ public class Controller {
 						}
 					}
 				}catch(NumberFormatException e) {
-					if(textLat.getText() != "-")
-					textLat.clear();
+					if(!textLat.getText().equals("-")) {
+					textLat.clear();}
 					
 				}	
 		});
 		
-		textLong.setOnKeyReleased(event -> {
+		textLong.setOnKeyTyped(event -> {
 			ville.getChildren().clear();
 			selected = true; 
 				try {
@@ -351,7 +350,7 @@ public class Controller {
 						}
 					}
 				}catch(NumberFormatException e) {
-					if(textLong.getText() != "-")
+					if(!textLong.getText().equals("-"))
 					textLong.clear();
 					
 				}	

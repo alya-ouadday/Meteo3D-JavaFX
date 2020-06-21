@@ -46,8 +46,6 @@ public class DonneesPlanete {
 	}
 	
 	public float getAnomalieZoneAnnee(int lat, int lon, int annee) {
-		//System.out.println("L'anomalie de l'année "+ annee + " à la zone "+ getZone(lat, lon) + " est de : "+
-				//getZone(lat, lon).getAnomalieAnnee(annee));
 		return getZone(lat, lon).getAnomalieAnnee(annee); 
 	}
 	
