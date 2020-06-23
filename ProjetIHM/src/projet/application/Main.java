@@ -11,7 +11,12 @@ import projet.controller.Controller;
 import projet.data.DonneesPlanete;
 import projet.data.RecuperationDonnees;
 
-
+/**
+ * 
+ * Main dans lequel on lance l'application
+ * @author BEN OUADDAY 
+ *
+ */
 public class Main extends Application{
 	
 

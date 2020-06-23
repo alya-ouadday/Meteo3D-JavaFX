@@ -5,15 +5,33 @@ import java.util.HashMap;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 
+
+/**
+ * 
+ * EchelleCouleur représente l'échelle de couleur utilisée pour visualiser les anomalies sur le globe
+ * @author BEN OUADDAY
+ *
+ */
 public class EchelleCouleur {
-	 
+	/**
+	 * echelle de couleur 
+	 * HahsMap qui associe le nom d'un material à un material 
+	 */
 	private HashMap<String, PhongMaterial> echelle= new HashMap<String, PhongMaterial> ();
 	
-	
+	/**
+	 * retourne l'ensemble des couleurs de l'échelle de couleur 
+	 * HashMap qui associe un nom de material à un material  
+	 * @return echelle
+	 */
 	public HashMap<String, PhongMaterial> getEchelle(){
 		return echelle; 
 	}
-
+	
+	/**
+	 * met en place l'échelle de couleurs pour les quadrilatères 
+	 *
+	 */
 	public  void setEchelleQuadri() {
 		
 		final PhongMaterial rbMat = new PhongMaterial();
@@ -67,6 +85,11 @@ public class EchelleCouleur {
 
 	}
 	
+	/**
+	 * retourne un material en fonction de l'anomalie entrée en paramètre
+	 * @param anomalie de la Zone dont on veut colorer le quadrilatère
+	 * @return material 
+	 */
 	public PhongMaterial getMaterialQuadri(float anomalie) {
    		PhongMaterial material; 
 		if(anomalie <-2) {
@@ -103,9 +126,18 @@ public class EchelleCouleur {
 		return material; 
 	}
 	
+	/**
+	 * retourne un material transparent 
+	 * @return material 
+	 */
 	public PhongMaterial getTranspMaterial() {
 		return echelle.get("gray"); 
 	}
+	
+	
+	/**
+	 * met en place l'échelle de couleur des histogrammes 
+	 */
 	public void setEchelleHisto() {
 		final PhongMaterial redMat = new PhongMaterial();
         Color red = Color.rgb(255, 0, 0);
@@ -126,6 +158,12 @@ public class EchelleCouleur {
         echelle.put("gray", grayMat); 
 
 	}
+	
+	/**
+	 * retourne un material en fonction de l'anomalie entrée en paramètre
+	 * @param anomalie de la Zone dont on veut colorer l'histogramme  
+	 * @return material 
+	 */
 	public PhongMaterial getMaterialHisto(float anomalie) {
 		if(anomalie >= 0) {
 			return echelle.get("red"); 

@@ -7,6 +7,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.transform.Rotate;
 
+
+/**
+ * 
+ * CameraManager gère la position de la caméra en fonction des entrées reçues par l'utilisateur 
+ *
+ */
 public class CameraManager {
 
     private static final double CAMERA_MIN_DISTANCE = -0.5;
@@ -33,7 +39,12 @@ public class CameraManager {
     private double mouseDeltaY;
 
     private Camera camera;
-
+	/**
+	 * Constructeur
+	 * @param cam
+	 * @param mainRoot
+	 * @param root
+	 */
     public CameraManager(Camera cam, Node mainRoot, Group root) {
 
         camera = cam;

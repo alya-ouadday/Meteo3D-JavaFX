@@ -8,6 +8,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 
+/**
+ * 
+ * SimpleTest permet de tester la validité des fonctionnalités de base 
+ *
+ *
+ */
+
 public class SimpleTest {
 
 	DonneesPlanete resourceManager;
@@ -38,7 +45,7 @@ public class SimpleTest {
 
 		//VÃ©rifier que le nombre d'annÃ©es est Ã©gal Ã  141
 		assertEquals(141, RecuperationDonnees.sampleNumber);
-	    
+	   
 	}
 	
 	
@@ -46,6 +53,7 @@ public class SimpleTest {
 	public void MinTemperatureTest() {
 		//VÃ©rifier que la tempÃ©rature minimale dans le fichier est -6.2441664
 		assertEquals(-6.2441664f, resourceManager.getAnomalieMin());
+		
 	}	
 	
 	@Test
