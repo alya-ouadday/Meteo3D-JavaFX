@@ -199,7 +199,7 @@ public class Controller {
 		RecuperationDonnees.getDataFromCSVFile("src/projet/data/DonneesTerre.csv", terre);
 		}
 		else {
-			System.out.println("[Main] No file " + "src/projet/data/DonneesTerre.csv");
+			System.out.println("No file ");
 		}
 	}
 	
@@ -299,16 +299,32 @@ public class Controller {
 					ModeHisto.updateHistos(annee);	//on met à jour taille et material des histogrammes
 				}
 				
+				if(sliderAnnee.getValue() > 2020) {
+					sliderAnnee.setValue(2020);
+				}
 			}
 		});
 		
 		//on fait en sorte de ne prendre que les valeurs numériques entrées par l'utilisteur 
 		textAnnee.addEventFilter(KeyEvent.KEY_TYPED , isNumeric());
 		
+		//si l'année saisie par l'utilisateur est > 2020, on efface le texte 
+		textAnnee.setOnKeyReleased(event -> {
+			try {
+				if(Integer.parseInt(textAnnee.getText()) > 2020){
+				 textAnnee.clear();
+				}
+			}catch(Exception e) {
+				textAnnee.clear();
+			}
+		
+		});
+	
+		
 		//on relie de façon bidirectionnelle le textField année au slider 
 		textAnnee.textProperty().bindBidirectional(sliderAnnee.valueProperty(),new NumberStringConverter());
 	
-		//on relie le titre de l'application à la valeur du slider 
+		//on relie le titre de l'application à la valeur du slider et du textField
 		titreAnnee.textProperty().bind(textAnnee.textProperty());	
 				
 	
