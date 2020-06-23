@@ -61,7 +61,7 @@ import projet.vues.EchelleCouleur;
 import projet.vues.Graphique;
 import projet.vues.ModeHisto;
 import projet.vues.ModeQuadri;
-import tutoriel.Earth.*;
+import projet.Earth.*;
 
 import java.net.URL;
 
@@ -504,7 +504,7 @@ public class Controller {
 	public Group loadEarth(Group root3D) {
 		  ObjModelImporter objImporter = new ObjModelImporter(); 
 	        try {
-	        	URL modelUrl = this.getClass().getResource("/tutoriel/Earth/earth.obj");
+	        	URL modelUrl = this.getClass().getResource("/projet/Earth/earth.obj");
 	        	objImporter.read(modelUrl);
 	        	
 	        }catch(ImportException e) {
